@@ -27,6 +27,7 @@
 #include <QSpinBox>
 #include <QCheckBox>
 #include <QLabel>
+#include "windowingview.h"
 
 class SpectrogramControls : public QDockWidget
 {
@@ -75,4 +76,5 @@ public:
     QLabel *symbolRateLabel;
     QLabel *symbolPeriodLabel;
     QCheckBox *scalesCheckBox;
+    WindowingView *windowingView;
 };

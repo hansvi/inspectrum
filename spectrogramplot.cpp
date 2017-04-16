@@ -281,25 +281,7 @@ void SpectrogramPlot::setFFTSize(int size)
     fft.reset(new FFT(fftSize));
 
     window.reset(new float[fftSize]);
-    int zeroCount = (fftSize * timeResolution) / 100;
-    if ((zeroCount >= 0) && (zeroCount <= fftSize)) {
-        int windowSize = fftSize - zeroCount;
-        int leadingZeroCount = zeroCount/2;
-        
-        for (int i = 0; i < leadingZeroCount; i++) {
-            window[i] = 0;
-        }
-        for (int i = 0; i < windowSize; i++) {
-            window[i + leadingZeroCount] = kaiser(i, windowSize, beta, 0.0);
-        }
-        for (int i = windowSize + leadingZeroCount; i < fftSize; i++) {
-            window[i] = 0;
-        }
-    } else {
-        for(int i = 0; i < fftSize; i++) {
-            window[i] = 0;
-        }
-    }
+    calcFFTWindow(window.get(), fftSize, timeResolution, beta);
 
     setHeight(fftSize);
     auto dev = tuner.deviation();

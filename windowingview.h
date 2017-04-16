@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2015, Mike Walters <mike@flomp.net>
+ *  Copyright (C) 2017, Hans Van Ingelgom <hans@hansvi.be>
  *
  *  This file is part of inspectrum.
  *
@@ -19,23 +19,25 @@
 
 #pragma once
 
-#include <fftw3.h>
+#include <QWidget>
 
-class FFT
+class WindowingView : public QWidget
 {
+    Q_OBJECT
+
 public:
-    FFT(int size);
-    ~FFT();
-    void process(void *dest, void *source);
-    int getSize() {
-        return fftSize;
-    }
+    WindowingView(QWidget *parent = 0);
+    int heightForWidth(int w) const;
+    QSize sizeHint() const;
+
+public slots:
+    void setTimeResolution(int resolution);
+    void setBeta(int beta);
+
+protected:
+    void paintEvent(QPaintEvent *event);
 
 private:
-    int fftSize;
-    fftwf_complex *fftwIn = nullptr;
-    fftwf_complex *fftwOut = nullptr;
-    fftwf_plan fftwPlan = nullptr;
+    int beta;
+    int timeResolution;
 };
-
-void calcFFTWindow(float *window, int N, int timeResolution, float beta);

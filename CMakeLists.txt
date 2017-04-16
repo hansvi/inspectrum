@@ -49,6 +49,7 @@ list(APPEND inspectrum_sources
     tuner.cpp
     tunertransform.cpp
     util.cpp
+    windowingview.cpp
 )
 
 INCLUDE(FindPkgConfig)

@@ -63,6 +63,10 @@ SpectrogramControls::SpectrogramControls(const QString & title, QWidget * parent
     betaSlider->setRange(0, 15);
     layout->addRow(new QLabel(tr("Beta:")), betaSlider);
 
+    windowingView = new WindowingView(widget);
+    layout->addRow(windowingView);
+
+
     powerMaxSlider = new QSlider(Qt::Horizontal, widget);
     powerMaxSlider->setRange(-140, 10);
     layout->addRow(new QLabel(tr("Power max:")), powerMaxSlider);
@@ -99,6 +103,7 @@ SpectrogramControls::SpectrogramControls(const QString & title, QWidget * parent
     symbolPeriodLabel = new QLabel();
     layout->addRow(new QLabel(tr("Symbol period:")), symbolPeriodLabel);
 
+
     widget->setLayout(layout);
     setWidget(widget);
 
@@ -108,6 +113,8 @@ SpectrogramControls::SpectrogramControls(const QString & title, QWidget * parent
     connect(cursorsCheckBox, SIGNAL(stateChanged(int)), this, SLOT(cursorsStateChanged(int)));
     connect(powerMinSlider, SIGNAL(valueChanged(int)), this, SLOT(powerMinChanged(int)));
     connect(powerMaxSlider, SIGNAL(valueChanged(int)), this, SLOT(powerMaxChanged(int)));
+    connect(betaSlider, SIGNAL(valueChanged(int)), windowingView, SLOT(setBeta(int)));
+    connect(timeResolutionSlider, SIGNAL(valueChanged(int)), windowingView, SLOT(setTimeResolution(int)));
 }
 
 void SpectrogramControls::clearCursorLabels()

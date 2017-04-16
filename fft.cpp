@@ -19,6 +19,7 @@
 
 #include "fft.h"
 #include "string.h"
+#include <liquid/liquid.h>
 
 FFT::FFT(int size)
 {
@@ -41,4 +42,27 @@ void FFT::process(void *dest, void *source)
     memcpy(fftwIn, source, fftSize * sizeof(fftwf_complex));
     fftwf_execute(fftwPlan);
     memcpy(dest, fftwOut, fftSize * sizeof(fftwf_complex));
+}
+
+void calcFFTWindow(float *window, int N, int timeResolution, float beta)
+{
+    int zeroCount = (N * timeResolution) / 100;
+    if ((zeroCount >= 0) && (zeroCount <= N)) {
+        int windowSize = N - zeroCount;
+        int leadingZeroCount = zeroCount/2;
+        
+        for (int i = 0; i < leadingZeroCount; i++) {
+            window[i] = 0.0;
+        }
+        for (int i = 0; i < windowSize; i++) {
+            window[i + leadingZeroCount] = kaiser(i, windowSize, beta, 0.0);
+        }
+        for (int i = windowSize + leadingZeroCount; i < N; i++) {
+            window[i] = 0.0;
+        }
+    } else {
+        for(int i = 0; i < N; i++) {
+            window[i] = 0.0;
+        }
+    }
 }
